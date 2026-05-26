@@ -86,3 +86,26 @@ def leer_fasta(ruta):
     except FileNotFoundError:
         print(f"Error: No se encontró el archivo '{ruta}'", file=sys.stderr)
         sys.exit(1)
+
+
+def calcular_gc(secuencia):
+    """
+    Calcular el contenido GC
+
+    Args:
+        secuencia: Cadena de ADN (solo A, T, G, C)
+
+    Returns:
+        float: Porcentaje de GC (0-100)
+    """
+    secuencia_upper = secuencia.upper()
+    longitud = len(secuencia_upper)
+
+    if longitud == 0:
+        return 0
+
+    g_count = secuencia_upper.count("G")
+    c_count = secuencia_upper.count("C")
+    gc_count = g_count + c_count
+
+    return (gc_count / longitud) * 100
