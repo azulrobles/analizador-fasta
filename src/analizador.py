@@ -109,3 +109,34 @@ def calcular_gc(secuencia):
     gc_count = g_count + c_count
 
     return (gc_count / longitud) * 100
+
+
+def calcular_estadisticas(encabezado, secuencia):
+    """
+    Calcular longitud y GC para una secuencia
+
+    Args:
+        encabezado: Identificador de la secuencia
+        secuencia: Cadena de ADN
+
+    Returns:
+        dict: Diccionario con estadísticas
+    """
+    longitud = len(secuencia)
+    gc_porcentaje = calcular_gc(secuencia)
+
+    # Contar G y C individuales
+    secuencia_upper = secuencia.upper()
+    g_count = secuencia_upper.count("G")
+    c_count = secuencia_upper.count("C")
+    gc_count = g_count + c_count
+
+    return {
+        "encabezado": encabezado,
+        "secuencia": secuencia,
+        "longitud": longitud,
+        "g_count": g_count,
+        "c_count": c_count,
+        "gc_count": gc_count,
+        "gc_porcentaje": gc_porcentaje,
+    }
