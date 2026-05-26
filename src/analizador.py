@@ -170,7 +170,13 @@ def pasa_filtros(stats, args):
 
 
 def escribir_resultados(secuencias_filtradas, ruta):
-    """Guardar resultados en TSV"""
+    """
+    Guardar resultados en TSV
+
+    Args:
+        secuencias_filtradas: Lista de diccionarios con estadísticas
+        ruta: Ruta del archivo de salida
+    """
     try:
         with open(ruta, "w") as archivo:
             # Encabezado simplificado
