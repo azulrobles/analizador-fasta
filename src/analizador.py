@@ -167,3 +167,25 @@ def pasa_filtros(stats, args):
         return False
 
     return True
+
+
+def escribir_resultados(secuencias_filtradas, ruta):
+    """Guardar resultados en TSV"""
+    try:
+        with open(ruta, "w") as archivo:
+            # Encabezado simplificado
+            archivo.write("Encabezado\tLongitud\tGC%\n")
+
+            for stats in secuencias_filtradas:
+                linea = (
+                    f"{stats['encabezado']}\t"
+                    f"{stats['longitud']}\t"
+                    f"{stats['gc_porcentaje']:.2f}\n"
+                )
+                archivo.write(linea)
+
+        print(f"Resultados guardados en: {ruta}")
+
+    except IOError as e:
+        print(f"Error al escribir el archivo '{ruta}': {e}", file=sys.stderr)
+        sys.exit(1)
