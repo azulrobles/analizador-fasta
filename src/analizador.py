@@ -10,7 +10,7 @@ def parsear_argumentos():
     parser.add_argument(
         "-i",
         "--input",
-        default="secuencias.fasta",
+        default="data/ejemplo.fasta",
         help="Ruta del archivo FASTA a analizar",
     )
     parser.add_argument(
@@ -157,9 +157,9 @@ def pasa_filtros(stats, args):
     gc = stats["gc_porcentaje"]
 
     # Verificar filtros
-    if longitud < args.min_length:
+    if longitud < args.min_len:
         return False
-    if longitud > args.max_length:
+    if longitud > args.max_len:
         return False
     if gc < args.min_gc:
         return False
@@ -215,13 +215,13 @@ def main():
     secuencias_filtradas = []
     total_secuencias = 0
 
-    print(f"Leyendo archivo FASTA: {args.fasta}")
+    print(f"Leyendo archivo FASTA: {args.input}")
     print(f"Filtros aplicados:")
-    print(f"  - Longitud: {args.min_length} - {args.max_length}")
+    print(f"  - Longitud: {args.min_len} - {args.max_len}")
     print(f"  - GC%: {args.min_gc} - {args.max_gc}\n")
 
     # Procesar cada secuencia del archivo FASTA
-    for encabezado, secuencia in leer_fasta(args.fasta):
+    for encabezado, secuencia in leer_fasta(args.input):
         total_secuencias += 1
 
         # Calcular estadísticas
