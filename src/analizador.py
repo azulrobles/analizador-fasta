@@ -42,3 +42,47 @@ def parsear_argumentos():
     )
 
     return parser.parse_args()
+
+
+def leer_fasta(ruta):
+    """
+    Leer el archivo FASTA y devolver secuencias
+
+    Args:
+        ruta: Ruta del archivo FASTA
+
+    Returns:
+        tupla: (encabezado, secuencia)
+    """
+    encabezado_actual = None
+    secuencia_actual = ""
+
+    try:
+        with open(ruta, "r") as archivo:
+            for linea in archivo:
+                linea = linea.strip()
+
+                # Saltar líneas vacías
+                if not linea:
+                    continue
+
+                # Si la línea comienza con ">", es un encabezado
+                if linea.startswith(">"):
+                    # Guardar la secuencia anterior si existe
+                    if encabezado_actual is not None and secuencia_actual != "":
+                        yield (encabezado_actual, secuencia_actual)
+
+                    # Actualizar encabezado y reiniciar secuencia
+                    encabezado_actual = linea[1:]  # Quitar el ">"
+                    secuencia_actual = ""
+                else:
+                    # Acumular la secuencia
+                    secuencia_actual += linea
+
+            # Guardar la última secuencia si existe
+            if encabezado_actual is not None and secuencia_actual != "":
+                yield (encabezado_actual, secuencia_actual)
+
+    except FileNotFoundError:
+        print(f"Error: No se encontró el archivo '{ruta}'", file=sys.stderr)
+        sys.exit(1)
