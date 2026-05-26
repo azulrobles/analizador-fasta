@@ -195,3 +195,60 @@ def escribir_resultados(secuencias_filtradas, ruta):
     except IOError as e:
         print(f"Error al escribir el archivo '{ruta}': {e}", file=sys.stderr)
         sys.exit(1)
+
+
+def main():
+    """
+    Coordinar el análisis completo de secuencias FASTA.
+
+    1. Parsea argumentos de línea de comandos
+    2. Lee secuencias del archivo FASTA
+    3. Calcula estadísticas para cada secuencia
+    4. Filtra secuencias según los criterios especificados
+    5. Guarda resultados filtrados en archivo TSV
+
+    Returns:
+        None (sale con código 0 en caso de éxito, 1 en caso de error)
+    """
+    args = parsear_argumentos()
+
+    secuencias_filtradas = []
+    total_secuencias = 0
+
+    print(f"Leyendo archivo FASTA: {args.fasta}")
+    print(f"Filtros aplicados:")
+    print(f"  - Longitud: {args.min_length} - {args.max_length}")
+    print(f"  - GC%: {args.min_gc} - {args.max_gc}\n")
+
+    # Procesar cada secuencia del archivo FASTA
+    for encabezado, secuencia in leer_fasta(args.fasta):
+        total_secuencias += 1
+
+        # Calcular estadísticas
+        stats = calcular_estadisticas(encabezado, secuencia)
+
+        # Mostrar información
+        print(f"Secuencia: {stats['encabezado']}")
+        print(f"  Longitud: {stats['longitud']}")
+        print(
+            f"  G: {stats['g_count']}, C: {stats['c_count']}, G+C: {stats['gc_count']}"
+        )
+        print(f"  GC%: {stats['gc_porcentaje']:.2f}%", end="")
+
+        # Verificar filtros
+        if pasa_filtros(stats, args):
+            secuencias_filtradas.append(stats)
+            print(" ✓")
+        else:
+            print(" ✗ (filtrada)")
+        print()
+
+    # Guardar resultados
+    print(f"\nTotal de secuencias: {total_secuencias}")
+    print(f"Secuencias que pasan los filtros: {len(secuencias_filtradas)}")
+
+    escribir_resultados(secuencias_filtradas, args.output)
+
+
+if __name__ == "__main__":
+    main()
