@@ -140,3 +140,30 @@ def calcular_estadisticas(encabezado, secuencia):
         "gc_count": gc_count,
         "gc_porcentaje": gc_porcentaje,
     }
+
+
+def pasa_filtros(stats, args):
+    """
+    Decidir si una secuencia pasa los filtros
+
+    Args:
+        stats: Diccionario con estadísticas de la secuencia
+        args: Argumentos de línea de comandos
+
+    Returns:
+        bool: True si pasa todos los filtros
+    """
+    longitud = stats["longitud"]
+    gc = stats["gc_porcentaje"]
+
+    # Verificar filtros
+    if longitud < args.min_length:
+        return False
+    if longitud > args.max_length:
+        return False
+    if gc < args.min_gc:
+        return False
+    if gc > args.max_gc:
+        return False
+
+    return True
